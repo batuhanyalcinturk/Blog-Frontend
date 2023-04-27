@@ -1,46 +1,83 @@
-import React from "react";
+import React, { useState } from "react";
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import IconButton from '@mui/material/IconButton';
+import CommentIcon from '@mui/icons-material/Comment';
+import Collapse from '@mui/material/Collapse';
 import "./Post.scss";
-import { Avatar, CardHeader } from "@mui/material";
-import { red } from "@mui/material/colors";
+import { Link } from "react-router-dom";
+import { styled } from '@mui/material/styles';
+
+const ExpandMore = styled((props) => {
+    const { expand, ...other } = props;
+    return <IconButton {...other} />;
+})(({ theme, expand }) => ({
+    marginLeft: 'auto',
+    transition: theme.transitions.create('transform', {
+        duration: theme.transitions.duration.shortest,
+    }),
+}));
 
 export default function Post(props) {
 
-    const { title, text } = props;
+    const { title, summary, userName, userId, postId } = props;
+    const [liked, setLiked] = useState(false);
+    const [expanded, setExpanded] = useState(false);
+
+
+
+    const handleLike = () => {
+        setLiked(!liked);
+    }
+
+
+    const handleExpandClick = () => {
+        setExpanded(!expanded);
+    };
+
 
     return (
         <div className="postContainer">
-            <Card sx={{ maxWidth: 345 }}>
-                <CardHeader
-                    avatar={
-                        <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                            R
-                        </Avatar>
-                    }
-                    title="Shrimp and Chorizo Paella"
-                    subheader="September 14, 2016"
-                />
+            <Card sx={{ maxWidth: 500 }}>
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="div">
                         {title}
                     </Typography>
+                    <Link to={{ pathname: '/users/' + userId }}>
+                        <Typography variant="subtitle2">
+                            {userName}
+                        </Typography>
+                    </Link>
                     <Typography variant="body2" color="text.secondary">
-                        {text}
+                        {summary}
                     </Typography>
                 </CardContent>
                 <CardActions>
-                    <IconButton aria-label="add to favorites">
-                        <FavoriteIcon />
+                    <IconButton
+                        onClick={handleLike}
+                        aria-label="add to favorites">
+                        <FavoriteIcon style={liked ? { color: "red" } : null} />
                     </IconButton>
-                    <Button size="small">Share</Button>
-                    <Button size="small">Devamını Oku</Button>
+                    <Link to={{ pathname: '/posts/' + postId }}>
+                        Devamını Oku
+                    </Link>
+                    <ExpandMore
+                        expand={expanded}
+                        onClick={handleExpandClick}
+                        aria-expanded={expanded}
+                        aria-label="show more"
+                    >
+                        <CommentIcon  />
+                    </ExpandMore>
                 </CardActions>
+                <Collapse in={expanded} timeout="auto" unmountOnExit>
+                    <CardContent>
+
+                    </CardContent>
+                </Collapse>
             </Card>
         </div>
     )
