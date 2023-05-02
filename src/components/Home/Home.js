@@ -4,16 +4,14 @@ import PostForm from "../Post/PostForm";
 import "./Home.scss";
 import { useState } from "react";
 import { useEffect } from "react";
-import PostPage from "../Post/PostPage";
 
 
 function Home(){
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [postList, setPostList] = useState([]);
-    const [postPageList, setPostPageList] = useState([]);
     
-    useEffect(() => {
+    const refreshPosts = () => {
         fetch("/posts")
         .then(res => res.json())
         .then(
@@ -26,8 +24,11 @@ function Home(){
                 setError(error);
             }
         )
+    }
 
-    },[])
+    useEffect(() => {
+        refreshPosts();
+    },[postList])
 
     
 
@@ -39,10 +40,11 @@ function Home(){
         return(
 
             <div className="container">
-                <PostForm userId = {1} userName = {"ddd"} title = {"title"} text= {"text"} />
+                <PostForm userId = {1} userName = {"ddd"} refreshPosts = {refreshPosts}/>
                 
                 {postList.map(post => (
-                    <Post postId = {post.id} userId = {post.userId} userName = {post.userName} summary = {post.summary} title = {post.title} text= {post.text}></Post>
+                    <Post postId = {post.id} userId = {post.userId} userName = {post.userName} summary = {post.summary} 
+                    title = {post.title} text= {post.text}></Post>
                 ))}
                 
                 

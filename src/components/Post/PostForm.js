@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
@@ -8,8 +8,51 @@ import { Button, InputAdornment, OutlinedInput } from "@mui/material";
 
 export default function PostForm(props) {
 
-    const { title, summary, text, userName, userId, postId } = props;
+    const { userName, userId, refreshPosts} = props;
+    const [title, setTitle] = useState("");
+    const [summary, setSummary] = useState("");
+    const [text, setText] = useState("");
+    const [isSent, setIsSent] = useState(false);
 
+    const savePost = () => {
+        fetch("/posts",
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                title: title,
+                userId: userId,
+                summary: summary,
+                text: text,
+            }),
+        })
+        .then((res) => res.json())
+        .catch((err) => console.log("error"))
+    }
+    
+    const handleSubmit = () =>{
+        savePost();
+        setIsSent(true);
+        setTitle("");
+        setSummary("");
+        setText("");
+        refreshPosts();
+    }
+
+    const handleTitle = (value) => {
+        setTitle(value);
+        setIsSent(false);
+    }
+    const handleSummary = (value) => {
+        setSummary(value);
+        setIsSent(false);
+    }
+    const handleText = (value) => {
+        setText(value);
+        setIsSent(false);
+    }
 
     return (
         <div className="postContainer">
@@ -27,6 +70,8 @@ export default function PostForm(props) {
                             placeholder="Title"
                             inputProps={{ maxLenght: 5 }}
                             fullWidth
+                            value = {title}
+                            onChange={ (i) => handleTitle( i.target.value)}
                         >
 
                         </OutlinedInput>}
@@ -38,6 +83,8 @@ export default function PostForm(props) {
                             placeholder="Summary"
                             inputProps={{ maxLenght: 100 }}
                             fullWidth
+                            value = {summary}
+                            onChange={ (i) => handleSummary( i.target.value)}
                         >
                         </OutlinedInput>
                     </Typography>
@@ -49,9 +96,13 @@ export default function PostForm(props) {
                             placeholder="Text"
                             inputProps={{ maxLenght: 250 }}
                             fullWidth
+                            value = {text}
+                            onChange={ (i) => handleText( i.target.value)}
                             endAdornment={
                                 <InputAdornment position="end">
-                                    <Button variant="outlined">Paylaş</Button>
+                                    <Button variant="outlined"
+                                    onClick={handleSubmit}
+                                    >Paylaş</Button>
                                 </InputAdornment>
                             }
                         >
