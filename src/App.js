@@ -3,6 +3,7 @@ import {BrowserRouter,Routes ,Route} from "react-router-dom";
 import NavBar from './components/NavBar/NavBar';
 import Home from './components/Home/Home';
 import User from './components/User/User';
+import PostPage from './components/Post/PostPage';
 
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home/>}/>
         <Route path="/users/:userId" element={<User/>}/>
+        <Route path="/posts/:postId" element={<PostPage/>}/>
       </Routes>
       </BrowserRouter>
        

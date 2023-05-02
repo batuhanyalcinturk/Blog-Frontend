@@ -9,6 +9,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 
 export default function NavBar() {
     let userId = 5;
+    let postId = 6;
 
     return (
         <div>
@@ -29,6 +30,7 @@ export default function NavBar() {
                     </Typography>
                     <Button color="inherit">Login</Button>
                     <Link to={{ pathname: '/users/' + userId }}>User</Link>
+                    <Link to={{ pathname: '/posts/' + postId }}>Post</Link>
                 </Toolbar>
             </AppBar>
         </div>

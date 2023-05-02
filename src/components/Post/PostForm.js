@@ -3,13 +3,13 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import Typography from '@mui/material/Typography';
-import FavoriteIcon from '@mui/icons-material/Favorite';
 import IconButton from '@mui/material/IconButton';
 import CommentIcon from '@mui/icons-material/Comment';
 import Collapse from '@mui/material/Collapse';
 import "./Post.scss";
 import { Link } from "react-router-dom";
 import { styled } from '@mui/material/styles';
+import { Button, InputAdornment, OutlinedInput } from "@mui/material";
 
 const ExpandMore = styled((props) => {
     const { expand, ...other } = props;
@@ -21,16 +21,10 @@ const ExpandMore = styled((props) => {
     }),
 }));
 
-export default function Post(props) {
+export default function PostForm(props) {
 
-    const { title, summary, userName, userId, postId } = props;
-    const [liked, setLiked] = useState(false);
+    const { title, summary, text, userName, userId, postId } = props;
     const [expanded, setExpanded] = useState(false);
-
-    const handleLike = () => {
-        setLiked(!liked);
-    }
-
 
     const handleExpandClick = () => {
         setExpanded(!expanded);
@@ -39,26 +33,54 @@ export default function Post(props) {
 
     return (
         <div className="postContainer">
-            <Card sx={{ maxWidth: 500 }}>
+            <Card sx={{ maxWidth: 800 }}>
                 <CardContent>
-                    <Typography gutterBottom variant="h5" component="div">
-                        {title}
-                    </Typography>
                     <Link to={{ pathname: '/users/' + userId }}>
                         <Typography variant="subtitle2">
                             {userName}
                         </Typography>
                     </Link>
+                    <Typography gutterBottom variant="h5" component="div">
+                        {<OutlinedInput
+                            id="outlined-adorment-amount"
+                            multiline
+                            placeholder="Title"
+                            inputProps={{ maxLenght: 5 }}
+                            fullWidth
+                        >
+
+                        </OutlinedInput>}
+                    </Typography>
                     <Typography variant="body2" color="text.secondary">
-                        {summary}
+                        <OutlinedInput
+                            id="outlined-adorment-amount"
+                            multiline
+                            placeholder="Summary"
+                            inputProps={{ maxLenght: 100 }}
+                            fullWidth
+                        >
+
+                        </OutlinedInput>
+                    </Typography>
+
+                    <Typography variant="body2" color="text.secondary">
+                        <OutlinedInput
+                            id="outlined-adorment-amount"
+                            multiline
+                            placeholder="Text"
+                            inputProps={{ maxLenght: 250 }}
+                            fullWidth
+                            endAdornment={
+                                <InputAdornment position="end">
+                                    <Button variant="outlined">Paylaş</Button>
+                                </InputAdornment>
+                            }
+                        >
+
+                        </OutlinedInput>
                     </Typography>
                 </CardContent>
                 <CardActions>
-                    <IconButton
-                        onClick={handleLike}
-                        aria-label="add to favorites">
-                        <FavoriteIcon style={liked ? { color: "red" } : null} />
-                    </IconButton>
                     <Link to={{ pathname: '/posts/' + postId }}>
                         Devamını Oku
                     </Link>
