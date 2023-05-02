@@ -1,34 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import CardActions from '@mui/material/CardActions';
 import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
-import CommentIcon from '@mui/icons-material/Comment';
-import Collapse from '@mui/material/Collapse';
 import "./Post.scss";
 import { Link } from "react-router-dom";
-import { styled } from '@mui/material/styles';
 import { Button, InputAdornment, OutlinedInput } from "@mui/material";
-
-const ExpandMore = styled((props) => {
-    const { expand, ...other } = props;
-    return <IconButton {...other} />;
-})(({ theme, expand }) => ({
-    marginLeft: 'auto',
-    transition: theme.transitions.create('transform', {
-        duration: theme.transitions.duration.shortest,
-    }),
-}));
 
 export default function PostForm(props) {
 
     const { title, summary, text, userName, userId, postId } = props;
-    const [expanded, setExpanded] = useState(false);
-
-    const handleExpandClick = () => {
-        setExpanded(!expanded);
-    };
 
 
     return (
@@ -59,7 +39,6 @@ export default function PostForm(props) {
                             inputProps={{ maxLenght: 100 }}
                             fullWidth
                         >
-
                         </OutlinedInput>
                     </Typography>
 
@@ -76,28 +55,9 @@ export default function PostForm(props) {
                                 </InputAdornment>
                             }
                         >
-
                         </OutlinedInput>
                     </Typography>
-                </CardContent>
-                <CardActions>
-                    <Link to={{ pathname: '/posts/' + postId }}>
-                        Devamını Oku
-                    </Link>
-                    <ExpandMore
-                        expand={expanded}
-                        onClick={handleExpandClick}
-                        aria-expanded={expanded}
-                        aria-label="show more"
-                    >
-                        <CommentIcon />
-                    </ExpandMore>
-                </CardActions>
-                <Collapse in={expanded} timeout="auto" unmountOnExit>
-                    <CardContent>
-
-                    </CardContent>
-                </Collapse>
+                </CardContent>                
             </Card>
         </div>
     )
