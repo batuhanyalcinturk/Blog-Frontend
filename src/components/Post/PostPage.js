@@ -42,7 +42,6 @@ function PostPage() {
     } else {
         return (
             <div className="app">
-                <div>
                     <Card sx={{ maxWidth: 500 }}>
                         <CardContent>
                             <Typography gutterBottom variant="h5" component="div">
@@ -64,7 +63,6 @@ function PostPage() {
 
                         </CardActions>
                     </Card>
-                </div>
             </div>
         )
     }
