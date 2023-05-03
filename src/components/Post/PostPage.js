@@ -6,22 +6,21 @@ import Typography from '@mui/material/Typography';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import IconButton from '@mui/material/IconButton';
 import CommentIcon from '@mui/icons-material/Comment';
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 function PostPage() {
 
-    const { title, summary, text, userName, userId, postId } = useParams();
+    const { postId } = useParams();
     const [liked, setLiked] = useState(false);
-    const [post, setPost] = useState({});
+    const [post, setPost] = useState();
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
-    //const [postList, setPostList] = useState([]);
 
     const handleLike = () => {
         setLiked(!liked);
     }
 
-    const onePost = () => {
+    useEffect(() => {
         fetch(`/posts/${postId}`)
             .then(res => res.json())
             .then(
@@ -34,11 +33,7 @@ function PostPage() {
                     setError(error);
                 }
             )
-    }
-
-    useEffect(() => {
-        onePost();
-    }, { postId })
+    }, [postId])
 
     if (error) {
         return <div> Error !!! </div>
