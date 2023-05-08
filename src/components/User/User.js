@@ -3,10 +3,10 @@ import { useParams } from "react-router-dom";
 
 function User() {
 
-    const { userId } = useParams();
+    const { userId, userName } = useParams();
     return (
         <div>
-            User! {userId}
+            User! {userId} {userName}
         </div>
     )
 }

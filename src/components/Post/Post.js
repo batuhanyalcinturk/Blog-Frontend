@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
@@ -10,6 +10,9 @@ import Collapse from '@mui/material/Collapse';
 import "./Post.scss";
 import { Link } from "react-router-dom";
 import { styled } from '@mui/material/styles';
+import { Container } from "@mui/material";
+import Comment from "../Comment/Comment";
+import CommentForm from "../Comment/CommentForm";
 
 const ExpandMore = styled((props) => {
     const { expand, ...other } = props;
@@ -26,6 +29,10 @@ export default function Post(props) {
     const { title, summary, userName, userId, postId } = props;
     const [liked, setLiked] = useState(false);
     const [expanded, setExpanded] = useState(false);
+    const [error, setError] = useState(null);
+    const [isLoaded, setIsLoaded] = useState(false);
+    const [commentList, setCommentList] = useState([]);
+    const isInitialMount = useRef(true)
 
     const handleLike = () => {
         setLiked(!liked);
@@ -34,7 +41,33 @@ export default function Post(props) {
 
     const handleExpandClick = () => {
         setExpanded(!expanded);
+        refreshComments();
+        console.log(commentList);
     };
+
+    const refreshComments = () => {
+        fetch("/comments?postId=" + postId)
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    setIsLoaded(true);
+                    setCommentList(result);
+                },
+                (error) => {
+                    setIsLoaded(true);
+                    setError(error);
+                }
+            )
+    }
+
+    useEffect(() => {
+        if (isInitialMount.current) {
+            isInitialMount.current = false;
+        }
+        else {
+            refreshComments();
+        }
+    }, [commentList])
 
 
     return (
@@ -72,9 +105,13 @@ export default function Post(props) {
                     </ExpandMore>
                 </CardActions>
                 <Collapse in={expanded} timeout="auto" unmountOnExit>
-                    <CardContent>
-
-                    </CardContent>
+                    <Container fixed>
+                        {error? "error":
+                        isLoaded? commentList.map(comment => ( 
+                            <Comment userId = {1} userName = {"USER"} text = {comment.text} ></Comment>
+                        )) : "Loading"}
+                        <CommentForm userId = {1} userName = {"USER"} postId = {postId}></CommentForm>
+                    </Container>
                 </Collapse>
             </Card>
         </div>

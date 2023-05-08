@@ -4,11 +4,11 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import "./Post.scss";
 import { Link } from "react-router-dom";
-import { Button, InputAdornment, OutlinedInput } from "@mui/material";
+import { Alert, Button, InputAdornment, OutlinedInput, Snackbar } from "@mui/material";
 
 export default function PostForm(props) {
 
-    const { userName, userId, refreshPosts} = props;
+    const { userName, userId, refreshPosts } = props;
     const [title, setTitle] = useState("");
     const [summary, setSummary] = useState("");
     const [text, setText] = useState("");
@@ -16,23 +16,23 @@ export default function PostForm(props) {
 
     const savePost = () => {
         fetch("/posts",
-        {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                title: title,
-                userId: userId,
-                summary: summary,
-                text: text,
-            }),
-        })
-        .then((res) => res.json())
-        .catch((err) => console.log("error"))
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    title: title,
+                    userId: userId,
+                    summary: summary,
+                    text: text,
+                }),
+            })
+            .then((res) => res.json())
+            .catch((err) => console.log("error"))
     }
-    
-    const handleSubmit = () =>{
+
+    const handleSubmit = () => {
         savePost();
         setIsSent(true);
         setTitle("");
@@ -54,8 +54,21 @@ export default function PostForm(props) {
         setIsSent(false);
     }
 
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setIsSent(false);
+    };
+
     return (
         <div className="postContainer">
+            <Snackbar open={isSent} autoHideDuration={1200} onClose={handleClose}>
+                <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+                    Post başarılı bir şekilde eklendi!
+                </Alert>
+            </Snackbar>
             <Card sx={{ maxWidth: 800 }}>
                 <CardContent>
                     <Link to={{ pathname: '/users/' + userId }}>
@@ -70,8 +83,8 @@ export default function PostForm(props) {
                             placeholder="Title"
                             inputProps={{ maxLenght: 5 }}
                             fullWidth
-                            value = {title}
-                            onChange={ (i) => handleTitle( i.target.value)}
+                            value={title}
+                            onChange={(i) => handleTitle(i.target.value)}
                         >
 
                         </OutlinedInput>}
@@ -83,8 +96,8 @@ export default function PostForm(props) {
                             placeholder="Summary"
                             inputProps={{ maxLenght: 100 }}
                             fullWidth
-                            value = {summary}
-                            onChange={ (i) => handleSummary( i.target.value)}
+                            value={summary}
+                            onChange={(i) => handleSummary(i.target.value)}
                         >
                         </OutlinedInput>
                     </Typography>
@@ -96,19 +109,19 @@ export default function PostForm(props) {
                             placeholder="Text"
                             inputProps={{ maxLenght: 250 }}
                             fullWidth
-                            value = {text}
-                            onChange={ (i) => handleText( i.target.value)}
+                            value={text}
+                            onChange={(i) => handleText(i.target.value)}
                             endAdornment={
                                 <InputAdornment position="end">
                                     <Button variant="outlined"
-                                    onClick={handleSubmit}
+                                        onClick={handleSubmit}
                                     >Paylaş</Button>
                                 </InputAdornment>
                             }
                         >
                         </OutlinedInput>
                     </Typography>
-                </CardContent>                
+                </CardContent>
             </Card>
         </div>
     )
