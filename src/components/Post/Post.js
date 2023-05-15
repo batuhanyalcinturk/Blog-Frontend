@@ -26,16 +26,25 @@ const ExpandMore = styled((props) => {
 
 export default function Post(props) {
 
-    const { title, summary, userName, userId, postId } = props;
-    const [liked, setLiked] = useState(false);
+    const { title, summary, userName, userId, postId, likes } = props;
     const [expanded, setExpanded] = useState(false);
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [commentList, setCommentList] = useState([]);
-    const isInitialMount = useRef(true)
+    const [isLiked, setIsLiked] = useState(false);
+    const isInitialMount = useRef(true);
+    const [likeCount, setLikeCount] = useState(likes.length);
+    const [likeId, setLikeId] = useState(null);
 
     const handleLike = () => {
-        setLiked(!liked);
+        setIsLiked(!isLiked);
+        if(!isLiked){
+            saveLike();
+            setLikeCount(likeCount + 1)
+        }else{
+            deleteLike();
+            setLikeCount(likeCount - 1)
+        }
     }
 
 
@@ -60,6 +69,38 @@ export default function Post(props) {
             )
     }
 
+    const saveLike = () => {
+        fetch("/likes", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                postId: postId,
+                userId: userId,
+            }),
+        })
+        .then((res) => res.json())
+        .catch((err) => console.log(err))
+    }
+
+    const deleteLike = () => {
+        fetch("/likes/" + likeId, {
+            method: "DELETE",
+        })
+        .then((res) => res.json())
+        .catch((err) => console.log(err))
+    }
+
+    const checkLikes = () => {
+        var likeControl = likes.find((like) => like.userId === userId)
+        if(likeControl != null){
+            setLikeId(likeControl.id);
+            setIsLiked(true);
+        }
+        
+    }
+
     useEffect(() => {
         if (isInitialMount.current) {
             isInitialMount.current = false;
@@ -68,6 +109,9 @@ export default function Post(props) {
             refreshComments();
         }
     }, [commentList])
+
+    
+    useEffect(() => {checkLikes()},[])
 
 
     return (
@@ -90,8 +134,10 @@ export default function Post(props) {
                     <IconButton
                         onClick={handleLike}
                         aria-label="add to favorites">
-                        <FavoriteIcon style={liked ? { color: "red" } : null} />
+                        <FavoriteIcon style={isLiked ? { color: "red" } : null} />
                     </IconButton>
+                    {likeCount}
+                     
                     <Link to={{ pathname: '/posts/' + postId }}>
                         Devamını Oku
                     </Link>
