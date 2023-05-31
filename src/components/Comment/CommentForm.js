@@ -13,6 +13,7 @@ export default function CommentForm(props) {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
+                    "Authorization" : localStorage.getItem("tokenKey"),
                 },
                 body: JSON.stringify({
                     postId: postId,
@@ -21,7 +22,7 @@ export default function CommentForm(props) {
                 }),
             })
             .then((res) => res.json())
-            .catch((err) => console.log("error"))
+            .catch((err) => console.log(err))
     }
 
     const handleSubmit = () => {

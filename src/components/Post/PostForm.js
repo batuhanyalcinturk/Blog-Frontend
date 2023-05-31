@@ -20,6 +20,7 @@ export default function PostForm(props) {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
+                    "Authorization" : localStorage.getItem("tokenKey"),
                 },
                 body: JSON.stringify({
                     title: title,
@@ -29,7 +30,7 @@ export default function PostForm(props) {
                 }),
             })
             .then((res) => res.json())
-            .catch((err) => console.log("error"))
+            .catch((err) => console.log(err))
     }
 
     const handleSubmit = () => {

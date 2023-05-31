@@ -35,13 +35,14 @@ export default function Post(props) {
     const isInitialMount = useRef(true);
     const [likeCount, setLikeCount] = useState(likes.length);
     const [likeId, setLikeId] = useState(null);
+    let disabled = localStorage.getItem("currentUser") == null ? true : false;
 
     const handleLike = () => {
         setIsLiked(!isLiked);
-        if(!isLiked){
+        if (!isLiked) {
             saveLike();
             setLikeCount(likeCount + 1)
-        }else{
+        } else {
             deleteLike();
             setLikeCount(likeCount - 1)
         }
@@ -74,31 +75,35 @@ export default function Post(props) {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Authorization": localStorage.getItem("tokenKey"),
             },
             body: JSON.stringify({
                 postId: postId,
-                userId: userId,
+                userId: localStorage.getItem("currentUser"),
             }),
         })
-        .then((res) => res.json())
-        .catch((err) => console.log(err))
+            .then((res) => res.json())
+            .catch((err) => console.log(err))
     }
 
     const deleteLike = () => {
         fetch("/likes/" + likeId, {
             method: "DELETE",
+            headers: {
+                "Authorization": localStorage.getItem("tokenKey"),
+            },
         })
-        .then((res) => res.json())
-        .catch((err) => console.log(err))
+            .then((res) => res.json())
+            .catch((err) => console.log(err))
     }
 
     const checkLikes = () => {
-        var likeControl = likes.find((like) => like.userId === userId)
-        if(likeControl != null){
+        var likeControl = likes.find((like => ""+like.userId === localStorage.getItem("currentUser")));
+        if (likeControl != null) {
             setLikeId(likeControl.id);
             setIsLiked(true);
         }
-        
+
     }
 
     useEffect(() => {
@@ -110,8 +115,8 @@ export default function Post(props) {
         }
     }, [commentList])
 
-    
-    useEffect(() => {checkLikes()},[])
+
+    useEffect(() => { checkLikes() }, [])
 
 
     return (
@@ -131,13 +136,21 @@ export default function Post(props) {
                     </Typography>
                 </CardContent>
                 <CardActions>
-                    <IconButton
-                        onClick={handleLike}
-                        aria-label="add to favorites">
-                        <FavoriteIcon style={isLiked ? { color: "red" } : null} />
-                    </IconButton>
+                    {disabled ?
+                        <IconButton
+                            disabled
+                            onClick={handleLike}
+                            aria-label="add to favorites">
+                            <FavoriteIcon style={isLiked ? { color: "red" } : null} />
+                        </IconButton> :
+                        <IconButton
+                            onClick={handleLike}
+                            aria-label="add to favorites">
+                            <FavoriteIcon style={isLiked ? { color: "red" } : null} />
+                        </IconButton>
+                    }
                     {likeCount}
-                     
+
                     <Link to={{ pathname: '/posts/' + postId }}>
                         Devamını Oku
                     </Link>
@@ -152,11 +165,12 @@ export default function Post(props) {
                 </CardActions>
                 <Collapse in={expanded} timeout="auto" unmountOnExit>
                     <Container fixed>
-                        {error? "error":
-                        isLoaded? commentList.map(comment => ( 
-                            <Comment userId = {1} userName = {"USER"} text = {comment.text} ></Comment>
-                        )) : "Loading"}
-                        <CommentForm userId = {1} userName = {"USER"} postId = {postId}></CommentForm>
+                        {error ? "error" :
+                            isLoaded ? commentList.map(comment => (
+                                <Comment userId={comment.userId} userName={comment.userName} text={comment.text} ></Comment>
+                            )) : "Loading"}
+                        {disabled ? "" :
+                            <CommentForm userId={localStorage.getItem("currentUser")} userName={localStorage.getItem("userName")} postId={postId}></CommentForm>}
                     </Container>
                 </Collapse>
             </Card>
