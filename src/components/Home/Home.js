@@ -7,6 +7,7 @@ import { useEffect } from "react";
 
 
 function Home(){
+    
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [postList, setPostList] = useState([]);
@@ -38,8 +39,9 @@ function Home(){
         return <div> Loading... </div>
     }else{
         return (
-            <>
-              {localStorage.getItem("currentUser") == null ? (
+            <div className="container">
+              <div className="postFormContainer">
+                {localStorage.getItem("currentUser") == null ? (
                 ""
               ) : (
                 <PostForm
@@ -48,6 +50,8 @@ function Home(){
                   refreshPosts={refreshPosts}
                 />
               )}
+
+                </div>
           
               {postList.map((post) => (
                 <Post
@@ -60,7 +64,7 @@ function Home(){
                   text={post.text}
                 ></Post>
               ))}
-            </>
+            </div>
           );
     }
 
