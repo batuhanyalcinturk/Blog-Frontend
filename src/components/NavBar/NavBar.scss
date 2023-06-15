@@ -1,0 +1,33 @@
+.NavBar {
+    background-color: #fff; /* Arkaplan rengi */
+    color: #ffffff; /* Yazı rengi */
+    font-family: Arial, sans-serif; /* Yazı tipi */
+  }
+  
+  .NavBar .home a {
+    color: #ffffff; /* Home linki rengi */
+    text-decoration: none; /* Link altı çizgisini kaldır */
+  }
+  
+  .NavBar .home a:hover {
+    color: #666; /* Home linki hover rengi */
+  }
+  
+  .NavBar a {
+    color: #ffffff; /* Diğer linklerin rengi */
+    text-decoration: none; /* Link altı çizgisini kaldır */
+  }
+  
+  .NavBar a:hover {
+    color: #666; /* Diğer linklerin hover rengi */
+  }
+  
+  
+    .navLinks {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .MuiToolbar-root{
+        justify-content: space-between;
+    }

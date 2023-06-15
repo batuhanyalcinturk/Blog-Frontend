@@ -37,20 +37,31 @@ function Home(){
     }else if(!isLoaded){
         return <div> Loading... </div>
     }else{
-        return(
-
-            <div className="container">
-                {localStorage.getItem("currentUser") == null ? "":
-                <PostForm userId = {localStorage.getItem("currentUser")} userName = {localStorage.getItem("userName")} refreshPosts = {refreshPosts}/>}
-                
-                {postList.map(post => (
-                    <Post likes = {post.postLikes} postId = {post.id} userId = {post.userId} userName = {post.userName} summary = {post.summary} 
-                    title = {post.title} text= {post.text}></Post>
-                ))}
-                
-                
-            </div>            
-        );
+        return (
+            <>
+              {localStorage.getItem("currentUser") == null ? (
+                ""
+              ) : (
+                <PostForm
+                  userId={localStorage.getItem("currentUser")}
+                  userName={localStorage.getItem("userName")}
+                  refreshPosts={refreshPosts}
+                />
+              )}
+          
+              {postList.map((post) => (
+                <Post
+                  likes={post.postLikes}
+                  postId={post.id}
+                  userId={post.userId}
+                  userName={post.userName}
+                  summary={post.summary}
+                  title={post.title}
+                  text={post.text}
+                ></Post>
+              ))}
+            </>
+          );
     }
 
 }

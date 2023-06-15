@@ -6,43 +6,39 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import { LockOpen } from "@mui/icons-material";
+import "./NavBar.scss";
 
 export default function NavBar() {
 
     let navigate = useNavigate()
 
     const onClick = () => {
-        localStorage.removeItem("tokenKey")
-        localStorage.removeItem("currentUser")
-        localStorage.removeItem("refreshKey")
-        localStorage.removeItem("userName")
+        localStorage.removeItem("tokenKey");
+        localStorage.removeItem("currentUser");
+        localStorage.removeItem("refreshKey");
+        localStorage.removeItem("userName");
         navigate(0);
     }
 
     return (
-        <div>
+        <div className="NavBar">
             <AppBar position="static">
                 <Toolbar>
-                    <IconButton
-                        size="large"
-                        edge="start"
-                        color="inherit"
-                        aria-label="menu"
-                        sx={{ mr: 2 }}
-
-                    >
-                        <MenuIcon />
-                    </IconButton>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        <Link to="/">Home</Link>
-                    </Typography>
-                    <Typography variant="h6">
-                        {localStorage.getItem("currentUser") == null ? <Link to="/auth">Login/Register</Link> :
-                            <div><IconButton onClick={onClick}><LockOpen></LockOpen></IconButton>
-                                <Link to={{ pathname: '/users/' + localStorage.getItem("currentUser") }}>Profil</Link>
-                            </div>}
-                    </Typography>
-
+                    <div className="logo">
+                        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                            <Link to="/">Home</Link>
+                        </Typography>
+                    </div>
+                    <div className="navLinks">
+                        <Typography variant="h6">
+                            {localStorage.getItem("currentUser") == null ?
+                                <Link to="/auth">Login/Register</Link> :
+                                <div>
+                                    <IconButton onClick={onClick}><LockOpen /></IconButton>
+                                    <Link to={{ pathname: '/users/' + localStorage.getItem("currentUser") }}>Profil</Link>
+                                </div>}
+                        </Typography>
+                    </div>
                 </Toolbar>
             </AppBar>
         </div>

@@ -136,7 +136,8 @@ export default function Post(props) {
                     </Typography>
                 </CardContent>
                 <CardActions>
-                    {disabled ?
+                    <div className="likeAndCount">
+                        {disabled ?
                         <IconButton
                             disabled
                             onClick={handleLike}
@@ -150,10 +151,14 @@ export default function Post(props) {
                         </IconButton>
                     }
                     {likeCount}
-
+                    </div>
+                    <div className="continue">
                     <Link to={{ pathname: '/posts/' + postId }}>
                         Devamını Oku
                     </Link>
+                    </div>
+                    <div className="yorum">
+                    
                     <ExpandMore
                         expand={expanded}
                         onClick={handleExpandClick}
@@ -162,6 +167,8 @@ export default function Post(props) {
                     >
                         <CommentIcon />
                     </ExpandMore>
+                    </div>
+                    
                 </CardActions>
                 <Collapse in={expanded} timeout="auto" unmountOnExit>
                     <Container fixed>

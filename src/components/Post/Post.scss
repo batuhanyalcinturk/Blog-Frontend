@@ -1,8 +1,26 @@
 .postContainer{
-    border-width: 3px;
-    border-color: black;
-    border-style: solid;
-    justify-content: center;
-    align-items: center;
+    display: flex;
     
+    max-width: 1200px;
+    border-width: 2px;
+    border-color: black;
+    border-style: round($number: 2);
+    justify-content: center;
+    text-align: center;
+    margin-bottom: 15px;
+    
+    
+}
+.MuiPaper-root{
+    min-width: 500px;
+}
+.MuiCardActions-root{
+    justify-content: space-between;
+      
+       
+ 
+    .yorum{
+        display: flex;
+    }
+        
 }
