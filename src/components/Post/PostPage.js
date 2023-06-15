@@ -24,20 +24,23 @@ function PostPage() {
         setLiked(!liked);
     }
 
+
     const refreshComments = () => {
-        fetch("/comments?postId=" + postId)
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    setIsLoaded(true);
-                    setCommentList(result);
-                },
-                (error) => {
-                    setIsLoaded(true);
-                    setError(error);
-                }
-            )
-    }
+        fetch(`/comments?postId=${postId}`)
+          .then(res => res.json())
+          .then(
+            (result) => {
+              setIsLoaded(true);
+              setCommentList(result);
+            },
+            (error) => {
+              setIsLoaded(true);
+              setError(error);
+            }
+          );
+      };
+      
+
 
     const listingPost = () => {
         fetch(`/posts/${postId}`)
@@ -51,9 +54,9 @@ function PostPage() {
                     setIsLoaded(true);
                     setError(error);
                 }
-            )
+            );
 
-    }
+    };
 
     useEffect(() => {
         listingPost();
@@ -88,7 +91,7 @@ function PostPage() {
                                     isLoaded ? commentList.map(comment => (
                                         <Comment userId={1} userName={"USER"} text={comment.text} ></Comment>
                                     )) : "Loading"}
-                                <CommentForm userId = {1} userName = {"USER"} postId = {postId}></CommentForm>
+                                <CommentForm userId={1} userName={"USER"} postId={postId}></CommentForm>
                             </Container>
                             <CommentIcon />
                         </IconButton>
