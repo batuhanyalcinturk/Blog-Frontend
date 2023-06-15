@@ -10,6 +10,7 @@ import { useParams } from "react-router-dom";
 import { Container } from "@mui/material";
 import Comment from "../Comment/Comment";
 import CommentForm from "../Comment/CommentForm";
+import "./Post.scss";
 
 function PostPage() {
 
@@ -19,6 +20,7 @@ function PostPage() {
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [commentList, setCommentList] = useState([]);
+    let disabled = localStorage.getItem("currentUser") == null ? true : false;
 
     const handleLike = () => {
         setLiked(!liked);
@@ -27,19 +29,19 @@ function PostPage() {
 
     const refreshComments = () => {
         fetch(`/comments?postId=${postId}`)
-          .then(res => res.json())
-          .then(
-            (result) => {
-              setIsLoaded(true);
-              setCommentList(result);
-            },
-            (error) => {
-              setIsLoaded(true);
-              setError(error);
-            }
-          );
-      };
-      
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    setIsLoaded(true);
+                    setCommentList(result);
+                },
+                (error) => {
+                    setIsLoaded(true);
+                    setError(error);
+                }
+            );
+    };
+
 
 
     const listingPost = () => {
@@ -80,25 +82,16 @@ function PostPage() {
                         </Typography>
                     </CardContent>
                     <CardActions>
-                        <IconButton
-                            onClick={handleLike}
-                            aria-label="add to favorites">
-                            <FavoriteIcon style={liked ? { color: "red" } : null} />
-                        </IconButton>
-                        <IconButton>
-                            <Container fixed>
-                                {error ? "error" :
-                                    isLoaded ? commentList.map(comment => (
-                                        <Comment userId={1} userName={"USER"} text={comment.text} ></Comment>
-                                    )) : "Loading"}
-                                <CommentForm userId={1} userName={"USER"} postId={postId}></CommentForm>
-                            </Container>
-                            <CommentIcon />
-                        </IconButton>
-
-                    </CardActions>
-                </Card>
-            </div>
+                        <Container fixed>
+                            {error ? "error" :
+                                isLoaded ? commentList.map(comment => (
+                                    <Comment userId={comment.userId} userName={comment.userName} text={comment.text} ></Comment>
+                                )) : "Loading"}
+                            <CommentForm userId={localStorage.getItem("currentUser")} userName={localStorage.getItem("userName")} postId={postId}></CommentForm>
+                        </Container>
+                </CardActions>
+            </Card>
+            </div >
         )
     }
 

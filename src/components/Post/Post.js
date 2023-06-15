@@ -126,11 +126,10 @@ export default function Post(props) {
                     <Typography gutterBottom variant="h5" component="div">
                         {title}
                     </Typography>
-                    <Link to={{ pathname: '/users/' + userId }}>
+                    
                         <Typography variant="subtitle2">
-                            {userName}
+                            Yazar : {userName}
                         </Typography>
-                    </Link>
                     <Typography variant="body2" color="text.secondary">
                         {summary}
                     </Typography>
