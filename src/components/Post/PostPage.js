@@ -10,7 +10,8 @@ import { useParams } from "react-router-dom";
 import { Container } from "@mui/material";
 import Comment from "../Comment/Comment";
 import CommentForm from "../Comment/CommentForm";
-import "./Post.scss";
+import "./PostPage.scss";
+import { DisplaySettings } from "@mui/icons-material";
 
 function PostPage() {
 
@@ -72,7 +73,8 @@ function PostPage() {
     } else {
         return (
             <div className="app">
-                <Card sx={{ maxWidth: 1500 }}>
+                <Card sx={{ maxWidth: 1500  }}>
+                    <div className="postPageCart">
                     <CardContent>
                         <Typography gutterBottom variant="h5" component="div">
                             {post.title}
@@ -89,7 +91,9 @@ function PostPage() {
                                 )) : "Loading"}
                             <CommentForm userId={localStorage.getItem("currentUser")} userName={localStorage.getItem("userName")} postId={postId}></CommentForm>
                         </Container>
-                </CardActions>
+                    
+                    </CardActions>
+                    </div>
             </Card>
             </div >
         )

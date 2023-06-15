@@ -39,7 +39,10 @@ function Home(){
         return <div> Loading... </div>
     }else{
         return (
-            <div className="container">
+            <div >
+              
+
+              
               <div className="postFormContainer">
                 {localStorage.getItem("currentUser") == null ? (
                 ""
@@ -50,9 +53,9 @@ function Home(){
                   refreshPosts={refreshPosts}
                 />
               )}
-
+                
                 </div>
-          
+              <div className="container">
               {postList.map((post) => (
                 <Post
                   likes={post.postLikes}
@@ -64,6 +67,8 @@ function Home(){
                   text={post.text}
                 ></Post>
               ))}
+              </div>
+              
             </div>
           );
     }
